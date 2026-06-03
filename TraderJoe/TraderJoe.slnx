@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="TraderJoe.MainSystem.Api/TraderJoe.MainSystem.Api.csproj" />
+  <Project Path="TraderJoe.MainSystem.TradingEngine/TraderJoe.MainSystem.TradingEngine.csproj" />
+  <Project Path="TraderJoe.PricingEngine/TraderJoe.PricingEngine.csproj" />
+  <Project Path="TraderJoe.SharedNuget/TraderJoe.SharedNuget.csproj" />
+</Solution>
