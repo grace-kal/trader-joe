@@ -7,9 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
     <Folder Include="Publisher\" />
-    <Folder Include="Services\Interfaces\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TraderJoe.SharedNuget\TraderJoe.SharedNuget.csproj" />
   </ItemGroup>
 
 </Project>
