@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Publisher\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\TraderJoe.SharedNuget\TraderJoe.SharedNuget.csproj" />
   </ItemGroup>
 
