@@ -18,7 +18,7 @@ public class TradeRequestEntity
     public string Symbol { get; set; } = string.Empty;
     public decimal Price { get; set; }
     public decimal Quantity { get; set; }
-    public OrderType OrderType { get; set; }
+    public OrderType Type { get; set; }
     public OrderSide Side { get; set; }
     public OrderSource Source { get; set; }
     public OrderStatus Status { get; set; }

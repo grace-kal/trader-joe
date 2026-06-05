@@ -15,7 +15,8 @@ using TraderJoe.SharedNuget.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-MappingConfig.Configure();
+TraderJoe.MainSystem.Api.MappingConfig.Configure();
+TraderJoe.MainSystem.TradingEngine.MappingConfig.Configure();
 
 //channel- the pipe between PricingEngine and TradingService
 //in production this would be Kafka/Service Bus/actual MB

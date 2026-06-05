@@ -19,7 +19,7 @@ public class OrderEntity
     public decimal Price { get; set; }
     public decimal Quantity { get; set; }
     public OrderSide Side { get; set; }
-    public OrderType OrderType { get; set; }
+    public OrderType Type { get; set; }
     public OrderSource Source { get; set; }
     public DateTime CreatedAt { get; set; }
 }

@@ -13,38 +13,18 @@ public class PriceGeneratorHostedService(
     IPriceNormalizer normalizer,
     IPricePublisher publisher) : BackgroundService
 {
-
     protected override async Task ExecuteAsync(CancellationToken ct)
     {
         var symbols = SymbolBasePrices.Prices.Keys.ToList();
 
-        var tasks = symbols.Select(symbol =>
-            GenerateForSymbolAsync(symbol, ct));
-
-        await Task.WhenAll(tasks);
-    }
-
-    private async Task GenerateForSymbolAsync(string symbol, CancellationToken ct)
-    {
-        var currentPrice = SymbolBasePrices.Prices[symbol];
-
-        while (!ct.IsCancellationRequested)
+        // StreamAsync runs one producer per symbol concurrently (internally)
+        await foreach (var rawPrice in feed.StreamAsync(symbols, ct))
         {
-            var rawPrice = new RawPriceData
-            {
-                Symbol = symbol,
-                BidPrice = currentPrice * 0.999m,
-                AskPrice = currentPrice * 1.001m,
-                Timestamp = DateTime.UtcNow
-            };
+            if (!validator.IsValid(rawPrice))
+                continue;
 
-            if (validator.IsValid(rawPrice))
-            {
-                var normalized = normalizer.Normalize(rawPrice);
-                await publisher.PublishAsync(normalized, ct);
-            }
-
-            await Task.Delay(500, ct);
+            var normalized = normalizer.Normalize(rawPrice);
+            await publisher.PublishAsync(normalized, ct);
         }
     }
 

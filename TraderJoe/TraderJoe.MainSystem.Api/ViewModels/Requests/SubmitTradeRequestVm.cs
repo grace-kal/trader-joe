@@ -14,5 +14,5 @@ public class SubmitTradeRequestVm
     [Range(0.0001, double.MaxValue, ErrorMessage = "Quantity must be greater than zero.")]
     public decimal Quantity { get; set; }
     public OrderSide Side { get; set; }
-    public OrderType OrderType { get; set; } = OrderType.Limit;
+    public OrderType Type { get; set; } = OrderType.Limit;
 }

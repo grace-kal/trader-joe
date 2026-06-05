@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TraderJoe.MainSystem.TradingEngine.DataAccess;
 
@@ -10,9 +11,11 @@ using TraderJoe.MainSystem.TradingEngine.DataAccess;
 namespace TraderJoe.MainSystem.TradingEngine.Migrations
 {
     [DbContext(typeof(TradingEngineDbContext))]
-    partial class TradingEngineDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260605034706_Changes")]
+    partial class Changes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.8");

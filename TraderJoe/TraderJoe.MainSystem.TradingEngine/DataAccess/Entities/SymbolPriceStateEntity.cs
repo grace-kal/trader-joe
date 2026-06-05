@@ -14,5 +14,5 @@ public class SymbolPriceStateEntity
     public decimal SpreadPercent { get; set; }
     public decimal? PreviousMarketPrice { get; set; }
     public DateTime EventTimestamp { get; set; }
-    public DateTime LastUpdated { get; set; }
+    public DateTime UpdatedAt { get; set; }
 }
