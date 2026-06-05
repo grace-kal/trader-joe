@@ -19,7 +19,7 @@ TraderJoe.MainSystem.Api.MappingConfig.Configure();
 TraderJoe.MainSystem.TradingEngine.MappingConfig.Configure();
 
 //channel- the pipe between PricingEngine and TradingService
-//in production this would be Kafka/Service Bus/actual MB
+//in production this would be actual MB
 var channel = Channel.CreateUnbounded<PriceUpdateEvent>();
 builder.Services.AddSingleton(channel.Writer);
 builder.Services.AddSingleton(channel.Reader);
