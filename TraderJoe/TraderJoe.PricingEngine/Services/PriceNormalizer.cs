@@ -12,6 +12,6 @@ public class PriceNormalizer : IPriceNormalizer
             Symbol = data.Symbol.ToUpper().Trim(),
             BidPrice = Math.Round(data.BidPrice, 4),
             AskPrice = Math.Round(data.AskPrice, 4),
-            Timestamp = DateTime.UtcNow
+            EventTimestamp = data.Timestamp
         };
 }

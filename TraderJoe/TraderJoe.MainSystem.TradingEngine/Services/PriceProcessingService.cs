@@ -9,7 +9,6 @@ namespace TraderJoe.MainSystem.TradingEngine.Services;
 
 public class PriceProcessingService(
     IPriceStateStore priceStateStore,
-    IPriceStateRepository priceStateRepository,
     IAutoTradingEngine autoTradingEngine,
     IOrderService orderService,
     IRulesService rulesService) : IPriceProcessingService
@@ -31,16 +30,12 @@ public class PriceProcessingService(
             Spread = spread,
             SpreadPercent = spreadPercentage,
             PreviousMarketPrice = previousPriceState?.CurrentMarketPrice,
+            EventTimestamp = priceUpdate.EventTimestamp,
             UpdatedAt = DateTime.UtcNow
         };
 
         //in-memory fast update for quick access by trading logic
         priceStateStore.Update(newPriceState);
-
-        //persist in db as well
-        var entity = newPriceState.Adapt<SymbolPriceStateEntity>();
-        await priceStateRepository.UpsertAsync(entity);
-        await priceStateRepository.SaveChangesAsync();
 
         var rules = await rulesService.GetCurrentRulesAsync();
         var autoOrder = autoTradingEngine.GenerateOrder(newPriceState, rules);

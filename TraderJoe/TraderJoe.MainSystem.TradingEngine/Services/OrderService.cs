@@ -14,7 +14,8 @@ public class OrderService(
     IRulesService rulesService,
     IPriceStateStore priceStateStore,
     ITradeRequestRepository tradeRequestRepository,
-    IOrderRepository orderRepository) : IOrderService
+    IOrderRepository orderRepository,
+    TradingEngineDbContext db) : IOrderService
 {
     public async Task<TradeRequest> ProcessAsync(TradeRequest request)
     {
@@ -24,7 +25,7 @@ public class OrderService(
         {
             request.Status = OrderStatus.Rejected;
             request.RejectionReason = $"No price data available for symbol {request.Symbol}.";
-            await CreateTradeRequestAsync(request);
+            await PersistAsync(request, createOrder: false);
             return request;
         }
 
@@ -41,38 +42,41 @@ public class OrderService(
         var validation = rulesEngine.Validate(request, symbolPriceState, rules);
         (request.Status, request.RejectionReason) = validation.IsValid ? (OrderStatus.Accepted, null) : (OrderStatus.Rejected, validation.RejectionReason);
 
-        await CreateTradeRequestAsync(request);
-
-        if (validation.IsValid)
-            await CreateOrderAsync(request);
-
+        await PersistAsync(request, createOrder: validation.IsValid);
         return request;
     }
 
-    private async Task CreateTradeRequestAsync(TradeRequest request)
+    private async Task PersistAsync(TradeRequest request, bool createOrder)
     {
-        var entity = request.Adapt<TradeRequestEntity>();
-        await tradeRequestRepository.AddAsync(entity);
-        await tradeRequestRepository.SaveChangesAsync();
-    }
-
-    private async Task CreateOrderAsync(TradeRequest request)
-    {
-        var order = new Order
+        await using var transaction = await db.Database.BeginTransactionAsync();
+        try
         {
-            Id = Guid.NewGuid(),
-            TradeRequestId = request.Id,
-            Symbol = request.Symbol,
-            Price = request.Price,
-            Quantity = request.Quantity,
-            Side = request.Side,
-            Type = request.Type,
-            Source = request.Source,
-            CreatedAt = DateTime.UtcNow
-        };
+            await tradeRequestRepository.AddAsync(request.Adapt<TradeRequestEntity>());
 
-        var entity = order.Adapt<OrderEntity>();
-        await orderRepository.AddAsync(entity);
-        await orderRepository.SaveChangesAsync();
+            if (createOrder)
+            {
+                var order = new Order
+                {
+                    Id = Guid.NewGuid(),
+                    TradeRequestId = request.Id,
+                    Symbol = request.Symbol,
+                    Price = request.Price,
+                    Quantity = request.Quantity,
+                    Side = request.Side,
+                   Type = request.Type,
+                    Source = request.Source,
+                    CreatedAt = DateTime.UtcNow
+                };
+                await orderRepository.AddAsync(order.Adapt<OrderEntity>());
+            }
+
+            await db.SaveChangesAsync(); 
+            await transaction.CommitAsync();
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
     }
 }

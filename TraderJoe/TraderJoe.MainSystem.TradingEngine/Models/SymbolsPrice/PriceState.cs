@@ -12,5 +12,6 @@ public class PriceState
     // for auto trading determening
     public decimal? PreviousMarketPrice { get; set; }
 
+    public DateTime EventTimestamp { get; set; }
     public DateTime UpdatedAt { get; set; }
 }

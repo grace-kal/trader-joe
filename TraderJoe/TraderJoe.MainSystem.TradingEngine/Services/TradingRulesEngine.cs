@@ -9,6 +9,13 @@ public class TradingRulesEngine : ITradingRulesEngine
 {
     public ValidationResult Validate(TradeRequest request, PriceState priceState, TradingRules rules)
     {
+        //lower boundary checks
+        if (request.Price <= 0)
+            return ValidationResult.Reject("Price must be greater than zero.");
+
+        if (request.Quantity <= 0)
+            return ValidationResult.Reject("Quantity must be greater than zero.");
+
         // whitelist check for symbol
         if (rules.IsSymbolWhitelistEnabled && !rules.SymbolWhitelist.Contains(request.Symbol, StringComparer.OrdinalIgnoreCase))
             return ValidationResult.Reject($"Symbol {request.Symbol} is not in the whitelist.");
