@@ -9,7 +9,7 @@ public class AutoTradingEngine : IAutoTradingEngine
 {
     private const decimal PriceAdjustmentPercent = 0.0003m;
     private const decimal AutoOrderNotionalValue = 1000m;
-    public TradeRequest? GenerateOrder(PriceState priceState, TradingRules rules)
+    public TradeRequest? EvaluateAutoTradeRequestCreation(PriceState priceState, TradingRules rules)
     {
         if (priceState.SpreadPercent <= rules.AutoTradingSpreadThresholdPercent)
             return null;

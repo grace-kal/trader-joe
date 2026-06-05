@@ -5,5 +5,5 @@ namespace TraderJoe.MainSystem.TradingEngine.Services.Interfaces;
 
 public interface IAutoTradingEngine
 {
-    TradeRequest? GenerateOrder(PriceState priceState, TradingRules rules);
+    TradeRequest? EvaluateAutoTradeRequestCreation(PriceState priceState, TradingRules rules);
 }

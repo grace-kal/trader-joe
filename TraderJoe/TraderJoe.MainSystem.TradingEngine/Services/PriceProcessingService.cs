@@ -38,7 +38,7 @@ public class PriceProcessingService(
         priceStateStore.Update(newPriceState);
 
         var rules = await rulesService.GetCurrentRulesAsync();
-        var autoOrder = autoTradingEngine.GenerateOrder(newPriceState, rules);
+        var autoOrder = autoTradingEngine.EvaluateAutoTradeRequestCreation(newPriceState, rules);
 
         if (autoOrder is not null)
             await orderService.ProcessAsync(autoOrder);
