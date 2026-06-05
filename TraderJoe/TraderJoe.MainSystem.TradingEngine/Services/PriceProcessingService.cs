@@ -38,10 +38,10 @@ public class PriceProcessingService(
         priceStateStore.Update(newPriceState);
 
         var rules = await rulesService.GetCurrentRulesAsync();
-        var autoOrder = autoTradingEngine.EvaluateAutoTradeRequestCreation(newPriceState, rules);
+        var autoTradeRequest = autoTradingEngine.EvaluateAutoTradeRequestCreation(newPriceState, rules);
 
-        if (autoOrder is not null)
-            await orderService.ProcessAsync(autoOrder);
+        if (autoTradeRequest is not null)
+            await orderService.ProcessAsync(autoTradeRequest);
     }
 
 }

@@ -60,7 +60,10 @@ builder.Services.AddHostedService<PriceConsumerHostedService>();
 builder.Services.AddHostedService<PriceStatePersistenceService>();
 
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+        options.JsonSerializerOptions.Converters
+            .Add(new System.Text.Json.Serialization.JsonStringEnumConverter()));
 builder.Services.AddOpenApi();
 
 

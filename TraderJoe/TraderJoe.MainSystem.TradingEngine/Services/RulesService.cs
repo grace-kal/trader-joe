@@ -68,7 +68,7 @@ public class RulesService(IServiceScopeFactory scopeFactory) : IRulesService
             IsDuplicateOrderIdCheckEnabled = false,
             IsSymbolWhitelistEnabled = false,
             SymbolWhitelist = new List<string>(),
-            AutoTradingSpreadThresholdPercent = 0.5m,
+            AutoTradingSpreadThresholdPercent = 0.2m,
             UpdatedAt = DateTime.UtcNow
         };
 }
